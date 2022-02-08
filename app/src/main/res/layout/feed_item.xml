@@ -132,11 +132,23 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/profilename2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="captionihf as"
+            android:textStyle="bold"
+            android:layout_marginStart="10dp"
+            android:textSize="17sp"
+            android:layout_marginTop="5dp"
+            />
+
+        <TextView
             android:id="@+id/caption"
+            android:layout_marginStart="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="captioni asfasdfahd fasd fasdhfasdhf askdhfask"
-            android:layout_margin="10dp"
+            android:layout_marginBottom="10dp"
             />
 
     </LinearLayout>

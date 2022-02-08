@@ -15,6 +15,7 @@ class FeedAdapter(val dataset : MutableList<tempPostModel> , val context : Conte
     inner class MyViewHolder(view : View) : RecyclerView.ViewHolder(view){
         val personName : TextView = view.findViewById(R.id.postCreatorName)
         val caption : TextView = view.findViewById(R.id.caption)
+        val personName2 : TextView = view.findViewById(R.id.profilename2)
         val personDP : ImageView = view.findViewById(R.id.uploaderDPImage)
         val postImage : ImageView = view.findViewById(R.id.postImage)
     }
@@ -26,6 +27,7 @@ class FeedAdapter(val dataset : MutableList<tempPostModel> , val context : Conte
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
        holder.personName.text = dataset[position].posterName
+       holder.personName2.text = dataset[position].posterName
        holder.caption.text = dataset[position].content
 
         Glide.with(context)

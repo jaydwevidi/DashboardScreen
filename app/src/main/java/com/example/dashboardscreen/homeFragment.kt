@@ -69,7 +69,7 @@ class homeFragment : Fragment() {
         list.add(
             tempPostModel(
                 "Clark Joseph Kent" ,
-                "https://www.denofgeek.com/wp-content/uploads/2021/05/man-of-steel-henry-cavill-superman.jpg?fit=1920%2C1080",
+                "https://i.guim.co.uk/img/media/1af905f750e1dc85eb490a3ec20bf76fb3ac51f7/0_486_2518_1509/master/2518.jpg?width=465&quality=45&auto=format&fit=max&dpr=2&s=1257fe1010592f3e91cf17a80471eefa",
                 "https://observer.com/wp-content/uploads/sites/2/2021/05/1_ynJEWSa6ivgFpF0EUP1L_A.jpeg?quality=80&strip",
                 "Wishing all of you a very happy Independence Day.\nStay Safe\nStay Super !!"
             ))
