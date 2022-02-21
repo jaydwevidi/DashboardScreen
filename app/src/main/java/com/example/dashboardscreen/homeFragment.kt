@@ -1,15 +1,21 @@
 package com.example.dashboardscreen
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.dashboardscreen.retrofit.datamodels.UserIDToSend
+import com.example.dashboardscreen.retrofit.datamodels.ViewFeedResponse
+import com.example.dashboardscreen.retrofit.functionality.BuilderInstance
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.lang.Exception
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -19,16 +25,19 @@ private const val ARG_PARAM2 = "param2"
 
 class homeFragment : Fragment() {
 
+    val TAG = "Jay"
+    private lateinit var mView : View
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_home, container, false)
+        mView=  inflater.inflate(R.layout.fragment_home, container, false)
         //(activity as AppCompatActivity?)!!.supportActionBar!!.title = "Instagram"
 
         activity?.title = "Instagram"
-        view.findViewById<BottomNavigationView>(R.id.topNav).setOnItemSelectedListener {
+        mView.findViewById<BottomNavigationView>(R.id.topNav).setOnItemSelectedListener {
                 when(it.itemId){
                     R.id.feed_menu_item -> {
                         Toast.makeText(context, "hello", Toast.LENGTH_SHORT).show()
@@ -47,15 +56,69 @@ class homeFragment : Fragment() {
 
         }
 
-        val rv = view.findViewById<RecyclerView>(R.id.recyclerViewFeeds)
-
-        rv.apply {
-            adapter = FeedAdapter(getList() ,  context)
-            layoutManager = LinearLayoutManager(context , LinearLayoutManager.VERTICAL , false)
-        }
-        return view
+        getDList()
+        return mView
     }
 
+    private fun setupRecyclerView(context : Context , list : MutableList<tempPostModel> ){
+        val rv = mView.findViewById<RecyclerView>(R.id.recyclerViewFeeds)
+
+        rv.apply {
+            adapter = FeedAdapter(list ,  context)
+            layoutManager = LinearLayoutManager(context , LinearLayoutManager.VERTICAL , false)
+        }
+    }
+
+
+    private fun getDList() {
+        lifecycleScope.launchWhenCreated {
+            val response = try {
+                BuilderInstance.builderAPI.addToFeed(
+                    UserIDToSend(214)
+                )
+            }
+
+            catch (e: Exception) {
+                Log.d(TAG, "onCreate: login Exception $e  , ${e.message}")
+                return@launchWhenCreated
+            }
+
+            if(response.isSuccessful){
+                val body = response.body()
+                Log.d(TAG, "onCreate: response successful ${response.body()}")
+                bodyToList(body!!)
+
+
+            }
+            else{
+                Log.d(TAG, "onCreate: response unsuccessful")
+
+            }
+        }
+    }
+
+    fun bodyToList(body : ViewFeedResponse){
+        val dList = mutableListOf<tempPostModel>()
+        dList.addAll(getList())
+        for(i in body.data){
+            var image = "https://m.media-amazon.com/images/M/MV5BZWVhYzE0NzgtM2U1Yi00OWM1LWJlZTUtZmNkNWZhM2VkMDczXkEyXkFqcGdeQW1yb3NzZXI@._V1_.jpg"
+
+            try{
+
+                image = i.images[0].image
+            }
+            catch (e : Exception){}
+
+            val t = tempPostModel(
+                i.user_data.full_name ,
+                "https://static.wikia.nocookie.net/disney/images/1/13/Gal_Gadot.jpg/revision/latest?cb=20180811005357",
+                image ,
+                content = i.description
+            )
+            dList.add(t)
+        }
+        setupRecyclerView(requireContext() , dList)
+    }
     fun getList() : MutableList<tempPostModel>{
         val list = mutableListOf<tempPostModel>()
         list.add(
