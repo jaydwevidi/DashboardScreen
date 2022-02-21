@@ -4,13 +4,16 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.aghajari.zoomhelper.ZoomHelper
 import com.example.dashboardscreen.retrofit.datamodels.UserIDToSend
 import com.example.dashboardscreen.retrofit.datamodels.ViewFeedResponse
 import com.example.dashboardscreen.retrofit.functionality.BuilderInstance
@@ -35,6 +38,10 @@ class homeFragment : Fragment() {
         // Inflate the layout for this fragment
         mView=  inflater.inflate(R.layout.fragment_home, container, false)
         //(activity as AppCompatActivity?)!!.supportActionBar!!.title = "Instagram"
+
+
+        //ZoomHelper.addZoomableView(mView.findViewById<ImageView>(R.id.postImage))
+
 
         activity?.title = "Instagram"
         mView.findViewById<BottomNavigationView>(R.id.topNav).setOnItemSelectedListener {
@@ -67,6 +74,7 @@ class homeFragment : Fragment() {
             adapter = FeedAdapter(list ,  context)
             layoutManager = LinearLayoutManager(context , LinearLayoutManager.VERTICAL , false)
         }
+
     }
 
 
@@ -87,8 +95,6 @@ class homeFragment : Fragment() {
                 val body = response.body()
                 Log.d(TAG, "onCreate: response successful ${response.body()}")
                 bodyToList(body!!)
-
-
             }
             else{
                 Log.d(TAG, "onCreate: response unsuccessful")
@@ -156,5 +162,8 @@ class homeFragment : Fragment() {
 
         return list
     }
+
+
+
 
 }

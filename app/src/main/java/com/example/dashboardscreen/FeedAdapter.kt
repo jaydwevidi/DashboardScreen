@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.aghajari.zoomhelper.ZoomHelper
 import com.bumptech.glide.Glide
 
 class FeedAdapter(val dataset : MutableList<tempPostModel> , val context : Context) : RecyclerView.Adapter<FeedAdapter.MyViewHolder>() {
@@ -20,6 +21,7 @@ class FeedAdapter(val dataset : MutableList<tempPostModel> , val context : Conte
         val postImage : ImageView = view.findViewById(R.id.postImage)
     }
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.feed_item , parent , false)
         return MyViewHolder(view)
@@ -30,6 +32,9 @@ class FeedAdapter(val dataset : MutableList<tempPostModel> , val context : Conte
        holder.personName2.text = dataset[position].posterName
        holder.caption.text = dataset[position].content
 
+        ZoomHelper.addZoomableView(holder.postImage)
+        ZoomHelper.addZoomableView(holder.personDP)
+
         Glide.with(context)
             .load(dataset[position].posterDP)
             .fitCenter()
@@ -38,7 +43,7 @@ class FeedAdapter(val dataset : MutableList<tempPostModel> , val context : Conte
 
         Glide.with(context)
             .load(dataset[position].postImage)
-            .fitCenter()
+            .centerCrop()
             .into(holder.postImage)
     }
 
